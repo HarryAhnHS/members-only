@@ -1,0 +1,27 @@
+<div class="header">
+    <% if (!locals.currentUser) { %>
+        <div class="logged-out-header">
+            <a href="/log-in">Log in</a>
+            <a href="/sign-up">Sign up</a>
+        </div>
+    <% } else { %>
+        <div class="logged-in-header">
+            <div class="logged-in-greeting">
+                Hi @<%= locals.currentUser.first_name %>!
+            </div>
+
+            <div class="admin-header">
+                <% if (locals.currentUser.is_admin) { %>
+                    <p>Status: Admin</p>
+                <% } else { %>
+                    <a href="/set-admin">Become an admin</a>
+                <% } %>
+            </div>
+
+            <a href="/log-out">Log Out</a>
+        </div>
+    <% } %>
+    <div class="create-message">
+        <a href="/create">Create a message</a>
+    </div>
+</div>

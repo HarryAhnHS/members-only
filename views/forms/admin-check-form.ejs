@@ -4,23 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Members Only - Become Admin</title>
+    <title>Members Only - Become an admin</title>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <h1>Enter your admin key</h1>
-    <div class="errors-container">
-        <%- include('../partials/errors.ejs') %>
+    <%- include('../partials/header.ejs') %>
+    <div class="content">
+        <div class="content-head">
+            <h1>Enter your admin key</h1>
+        </div>
+        <div class="content-form">
+            <div class="errors-container">
+                <%- include('../partials/errors.ejs') %>
+            </div>
+            <form action="/set-admin" method="POST">
+                <div>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" disabled="disabled" value='<%=locals.currentUser.username %>'>
+                </div>
+                <div>
+                    <label for="admin_key">Secret Admin Key:</label>
+                    <input type="password" id="password" name="admin_key" required>
+                </div>
+                <button type="submit">Set Admin Status</button>
+            </form> 
+        </div>
     </div>
-    <form action="/set-admin" method="POST">
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" disabled="disabled" value='<%=locals.currentUser.username %>'>
-        </div>
-        <div>
-            <label for="admin_key">Secret Admin Key:</label>
-            <input type="password" id="password" name="admin_key" required>
-        </div>
-        <button type="submit">Set Admin Status</button>
-    </form> 
 </body>
 </html>

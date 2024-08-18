@@ -68,8 +68,9 @@ app.use(session({
 }));
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Middleware
+// Middleware to set locals
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     next();
@@ -83,5 +84,10 @@ app.use((req, res, next) => {
 });
 
 app.use("/", indexRouter);
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 app.listen(3000, () => console.log("app listening on port 3000!"));
