@@ -22,7 +22,30 @@ module.exports = {
         };
         const { first_name, last_name, username, password } = req.body; 
         await db.addUser(first_name, last_name, username, password);
-        res.redirect('/');
+        const user = await db.getUserByUsername(username); // Adjust this to match your DB function
+        console.log('test', user);
+
+        // Authenticate the user immediately after sign up
+       passport.authenticate('local', (err, user, info) => {
+            if (err) {
+                return next(err); // Handle errors from Passport
+            }
+            if (!user) {
+                // Authentication failed
+                const errors = [{ msg: typeof info.message === 'string' ? info.message : info.message[0] }];
+                return res.render('forms/sign-up-form', { 
+                    errors: errors
+                });
+            }
+            // Log the user in
+            req.logIn(user, (err) => {
+                if (err) {
+                    return next(err); // Handle errors from req.logIn
+                }
+                // Redirect on successful login
+                res.redirect('/');
+            });
+        })(req, res, next);
     }],
     logInGet: (req, res) => res.render('forms/log-in-form'),
     logInPost: (req, res, next) => {

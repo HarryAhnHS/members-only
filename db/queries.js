@@ -44,18 +44,22 @@ module.exports = {
     },
     addUser: async (first_name, last_name, username, password) => {
         try {
-            bcrypt.hash(password, 10, async (err, hashedPassword) => {
-                if (err) return console.error(err, 'while hashing password');
+            const hashedPassword = await new Promise((resolve, reject) => {
+                bcrypt.hash(password, 10, (err, hashedPassword) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(hashedPassword);
+                });
+            });
     
-                await pool.query("INSERT INTO users (first_name, last_name, username, password) VALUES ($1, $2, $3, $4)", [
-                    first_name,
-                    last_name,
-                    username,
-                    hashedPassword,
-                ]);
-                console.log(`Successfully added user ${username}`);
-            }); 
-        } catch(error) {
+            await pool.query(
+                "INSERT INTO users (first_name, last_name, username, password) VALUES ($1, $2, $3, $4)",
+                [first_name, last_name, username, hashedPassword]
+            );
+            
+            console.log(`Successfully added user ${username}`);
+        } catch (error) {
             console.error(`Error adding user ${username}: `, error);
             throw error; // Rethrow error for handling at a higher level
         }
