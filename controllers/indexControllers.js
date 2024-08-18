@@ -30,10 +30,26 @@ module.exports = {
         }
     }],
     logInGet: (req, res) => res.render('forms/log-in-form'),
-    logInPost: passport.authenticate("local", {
-        successRedirect: "/",
-        failureRedirect: "/log-in"
-    }),
+    logInPost: (req, res, next) => {
+        passport.authenticate('local', (err, user, info) => {
+            if (err) {
+                return next(err); // Handle errors from Passport
+            }
+            if (!user) {
+                // Authentication failed
+                const errors = [{ msg: typeof info.message === 'string' ? info.message : info.message[0] }];
+                return res.render('forms/log-in-form', { 
+                    errors: errors
+                });
+            }
+            req.logIn(user, (err) => {
+                if (err) {
+                    return next(err); // Handle errors from req.logIn
+                }
+                res.redirect('/'); // Redirect on successful login
+            });
+        })(req, res, next);
+    },
     logOutGet: (req, res, next) => {
         req.logout((err) => {
             if (err) {
