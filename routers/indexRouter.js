@@ -18,4 +18,11 @@ indexRouter.get("/log-out", indexControllers.logOutGet);
 indexRouter.get("/create", indexControllers.createPostGet);
 indexRouter.post("/create", indexControllers.createPostPost);
 
+// Admin
+indexRouter.get("/set-admin", indexControllers.setAdminGet);
+indexRouter.post("/set-admin", indexControllers.setAdminPost);
+
+// Delete messages - only as admin
+indexRouter.post("/delete/:id", indexControllers.deleteMessagePost);
+
 module.exports = indexRouter;

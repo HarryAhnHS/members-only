@@ -25,6 +25,19 @@ module.exports = {
         }
         
     },
+    deleteMessage: async(messageId) => {
+        const query = `
+            DELETE FROM messages WHERE messages.id = $1;
+        `;
+        try {
+            await pool.query(query, [messageId]);
+            console.log(`Successfully deleted message ${messageId}!`);
+        }
+        catch(error) {
+            console.error(`Error deleting message ${messageId}: `, error);
+            throw error; // Rethrow error for handling at a higher level
+        }
+    },
     getUserByUsername: async (username) =>{
         const { rows } = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
         return rows;
@@ -40,10 +53,27 @@ module.exports = {
                     username,
                     hashedPassword,
                 ]);
+                console.log(`Successfully added user ${username}`);
             }); 
         } catch(error) {
             console.error(`Error adding user ${username}: `, error);
             throw error; // Rethrow error for handling at a higher level
         }
-    }
+    },
+    setAdmin: async (id) => {
+        const query = `
+            UPDATE users
+            SET is_admin = true
+            WHERE users.id = $1;
+        `;
+
+        try {
+            await pool.query(query, [id]);
+            console.log(`Successfully set user: ${id} as admin`);
+        }
+        catch (error) {
+            console.error(`Error setting user ${id} as admin:`, error);
+            throw error; // Rethrow error for handling at a higher level
+        }
+    },
 }

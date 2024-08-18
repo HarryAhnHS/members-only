@@ -57,6 +57,18 @@ const validatePost = [
     body('message')
         .trim()
         .notEmpty().withMessage('Message is required')
+];
+
+const validateAdminKey = [
+    body('admin_key')
+        .trim()
+        .notEmpty().withMessage('Admin key is required')
+        .custom((value) => {
+            if (value !== process.env.ADMIN_SECRET_KEY) {
+                throw new Error('Invalid admin key');
+            }
+            return true;
+        })
 ]
 
-module.exports = { validateSignUp, validatePost };
+module.exports = { validateSignUp, validatePost, validateAdminKey };
