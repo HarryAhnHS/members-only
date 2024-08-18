@@ -8,25 +8,28 @@
 </head>
 <body>
     <%- include('./partials/header.ejs') %>
-    
     <div class="content">
         <div class="content-head">
-            <h1>Inbox <span class="message-count"><%=messages.length%></span></h1>
+            <div class="content-head-title">
+                <h1>Inbox</h1>
+                <div class="message-count"><%=messages.length%></div>
+            </div>
+            <div class="create-message">
+                <a href="/create">Create a message</a>
+            </div>
         </div>
 
         <div class="content-messages-container">
             <% messages.forEach(message => { %>
                 <div class="message-card">
                     <div class="global">
-                        <div class="message-title">Title: <%= message.title %></div>
-                        <div class="message-message">Message: <%= message.message %></div>
+                        <div class="message-title"><%= message.title %></div>
+                        <div class="message-message"><%= message.message %></div>
                     </div>
                     
                     <% if (locals.currentUser) {%>
-                        <div class="authenticated-only">
-                            <div class="message-added">Added: <%= message.added %></div>
-                            <div class="message-by">By: @<%= message.username %></div>
-                        </div>
+                        <div class="message-added">On <%= message.added %></div>
+                        <div class="message-by">By @<%= message.username %></div>
                     <%}; %>
     
                     <% if (locals.currentUser && locals.currentUser.is_admin) {%>

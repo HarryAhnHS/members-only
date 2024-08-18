@@ -1,4 +1,10 @@
 <div class="header">
+    <a href="/">
+        <div class="header-logo">
+            MembersOnly
+        </div>
+    </a>
+
     <% if (!locals.currentUser) { %>
         <div class="logged-out-header">
             <a href="/log-in">Log in</a>
@@ -7,21 +13,18 @@
     <% } else { %>
         <div class="logged-in-header">
             <div class="logged-in-greeting">
-                Hi @<%= locals.currentUser.first_name %>!
+                Hi <%= locals.currentUser.first_name %>!
             </div>
 
             <div class="admin-header">
                 <% if (locals.currentUser.is_admin) { %>
-                    <p>Status: Admin</p>
+                    <div>(Admin)</div>
                 <% } else { %>
                     <a href="/set-admin">Become an admin</a>
                 <% } %>
             </div>
 
-            <a href="/log-out">Log Out</a>
+            <a class="log-out" href="/log-out">Log Out</a>
         </div>
     <% } %>
-    <div class="create-message">
-        <a href="/create">Create a message</a>
-    </div>
 </div>
