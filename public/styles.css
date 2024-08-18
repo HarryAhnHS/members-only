@@ -1,6 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+body, a, input, button {
+    font-family: "Open Sans", sans-serif;
+}
+
 /* General Styles */
 body {
-    font-family: 'Arial', sans-serif;
     background-color: #f4f4f4;
     color: #333;
     margin: 0;
@@ -24,11 +29,12 @@ a:hover {
     background: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .content-head {
-    margin-bottom: 20px;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -92,6 +98,9 @@ h1 {
     color: #fff;
 }
 
+.logged-out-header a {
+    margin-left: 15px;
+}
 
 .logged-in-greeting {
     margin-right: 15px;
@@ -126,6 +135,7 @@ h1 {
 
 /* Message Cards Styles */
 .content-messages-container {
+    margin: 15px 0;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -193,7 +203,7 @@ button[type="submit"].delete-btn:hover {
 .content-form {
     display: flex;
     flex-direction: column;
-    padding: 15px 30px;
+    padding: 5px 15px;
     gap: 15px;
 }
 
@@ -244,10 +254,6 @@ button[type="submit"]:hover {
 }
 
 /* Error Message Styles */
-.errors-container {
-    margin-bottom: 20px;
-}
-
 .errors {
     background-color: #dc3545;
     color: #fff;
