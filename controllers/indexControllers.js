@@ -1,33 +1,27 @@
 const passport = require("passport");
-const bcrypt = require('bcryptjs');
-const pool = require('../db/pool');
+const db = require('../db/queries');
 
 const { validationResult } = require("express-validator");
 const validators = require('../helpers/validators');
 
+const { isAuth } = require('../helpers/authorizationMiddleware');
+
 module.exports = {
-    indexGet:  (req, res) => res.render("index"),
+    indexGet:  async (req, res) => {
+        const allMessages = await db.fetchMessages();
+        res.render("index", {messages: allMessages});
+    },
     signUpGet: (req, res) => res.render("forms/sign-up-form"),
     signUpPost: [validators.validateSignUp, async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).render('forms/sign-up-form', { errors: errors.array()});
-        }
-        try {
-            bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
-                if (err) return console.error(err, 'while hashing password');
-    
-                await pool.query("INSERT INTO users (first_name, last_name, username, password) VALUES ($1, $2, $3, $4)", [
-                    req.body.first_name,
-                    req.body.last_name,
-                    req.body.username,
-                    hashedPassword,
-                ]);
-            }); 
-            res.redirect("/");
-        } catch(err) {
-          return next(err);
-        }
+            return res.status(400).render('forms/sign-up-form', { 
+                errors: errors.array()
+            });
+        };
+        const { first_name, last_name, username, password } = req.body; 
+        await db.addUser(first_name, last_name, username, password);
+        res.redirect('/');
     }],
     logInGet: (req, res) => res.render('forms/log-in-form'),
     logInPost: (req, res, next) => {
@@ -58,4 +52,19 @@ module.exports = {
             res.redirect("/");
        })
     },
+    createPostGet: [isAuth, (req, res) => {
+        // Middleware to authorize user session
+        res.render('forms/create-post-form');
+    }],
+    createPostPost: [validators.validatePost, async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.render('/create-post-form', {
+                errors: errors.array()
+            })
+        }
+        const { title, message } = req.body;
+        await db.addMessage(req.user.id, title, message);
+        res.redirect('/');
+    }]
 }

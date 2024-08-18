@@ -5,7 +5,8 @@ module.exports = {
             next();
         }
         else {
-            res.status(401).json({ msg: 'You are not authorized to view this resource.'});
+            console.error("Please log in to use this feature");
+            res.redirect('/log-in');
         }
     }
 } 

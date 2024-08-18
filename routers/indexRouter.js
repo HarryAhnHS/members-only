@@ -14,4 +14,8 @@ indexRouter.post("/log-in", indexControllers.logInPost);
 // Logout
 indexRouter.get("/log-out", indexControllers.logOutGet);
 
+// Create message
+indexRouter.get("/create", indexControllers.createPostGet);
+indexRouter.post("/create", indexControllers.createPostPost);
+
 module.exports = indexRouter;

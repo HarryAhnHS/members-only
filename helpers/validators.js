@@ -48,4 +48,15 @@ const validateSignUp = [
         })
 ];
 
-module.exports = { validateSignUp };
+const validatePost = [
+    // Validate first name
+    body('title')
+        .trim()
+        .notEmpty().withMessage('Title is required'),
+
+    body('message')
+        .trim()
+        .notEmpty().withMessage('Message is required')
+]
+
+module.exports = { validateSignUp, validatePost };

@@ -15,13 +15,20 @@
                 <p>Welcome <%=locals.currentUser.first_name%>!</p>
                 <a href="/log-out">Log Out</a>
             </div>
-            <div>
-                <a href="/create">Create a message</a>
-            </div>
         <%};%>
+
+        <a href="/create">Create a message</a>
     </div>
     <div class="content">
-
+        <% messages.forEach(message => { %>
+            <div>
+                <h2>Title: <%= message.title %></h2>
+                <p>Message: <%= message.message %></p>
+                <p>Added: <%= message.added %></p>
+                <p>By: @<%= message.username %></p>
+            </div>
+            <hr>
+        <% }); %>
     </div>
 </body>
 </html>
