@@ -6,6 +6,10 @@
     <title>Members Only - Login</title>
 </head>
 <body>
+    <h1>Sign Up</h1>
+    <div class="errors-container">
+        <%- include('../partials/errors.ejs') %>
+    </div>
     <form action="/sign-up" method="POST">
         <div>
             <label for="first_name">First Name:</label>

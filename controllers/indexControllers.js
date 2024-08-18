@@ -2,10 +2,17 @@ const passport = require("passport");
 const bcrypt = require('bcryptjs');
 const pool = require('../db/pool');
 
+const { validationResult } = require("express-validator");
+const validators = require('../helpers/validators');
+
 module.exports = {
     indexGet:  (req, res) => res.render("index"),
     signUpGet: (req, res) => res.render("forms/sign-up-form"),
-    signUpPost: async (req, res, next) => {
+    signUpPost: [validators.validateSignUp, async (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).render('forms/sign-up-form', { errors: errors.array()});
+        }
         try {
             bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
                 if (err) return console.error(err, 'while hashing password');
@@ -21,7 +28,7 @@ module.exports = {
         } catch(err) {
           return next(err);
         }
-    },
+    }],
     logInGet: (req, res) => res.render('forms/log-in-form'),
     logInPost: passport.authenticate("local", {
         successRedirect: "/",

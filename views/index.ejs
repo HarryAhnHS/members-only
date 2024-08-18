@@ -7,9 +7,21 @@
 </head>
 <body>
     <div class="header">
-        <a href="/log-in">Log in</a>
-        <a href="/sign-up">Sign up</a>
+        <% if (!locals.currentUser) {%>
+            <a href="/log-in">Log in</a>
+            <a href="/sign-up">Sign up</a>
+        <%} else {%>
+            <div>
+                <p>Welcome <%=locals.currentUser.first_name%>!</p>
+                <a href="/log-out">Log Out</a>
+            </div>
+            <div>
+                <a href="/create">Create a message</a>
+            </div>
+        <%};%>
     </div>
-    
+    <div class="content">
+
+    </div>
 </body>
 </html>
